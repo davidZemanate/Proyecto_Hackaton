@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
 from .forms import AnimalForm, AyudaForm
 from django.shortcuts import get_object_or_404, redirect
 from .models import Animal
@@ -35,3 +36,24 @@ def eliminarAnimal(request, animal_id):
     animal = get_object_or_404(Animal, id=animal_id)
     animal.delete()
     return redirect('dashboard')
+
+##iniciar sesion
+def iniciarSesion(request):
+
+    if request.method == 'POST':
+        usuario = request.POST.get('usuario')  # Utiliza get() para evitar errores
+        constrasena = request.POST.get('contrasena')
+        user = authenticate(username=usuario, password=constrasena)
+        if user is not None:
+            login(request, user)
+            return redirect('dashboard')
+        else:
+            return render(request, 'index.html', {'error': 'Credenciales incorrectas'})
+    else:
+        return render(request, 'index.html', {'error': 'Credenciales inválidas'})
+
+
+##cerrar sesion
+def CerrarSesion(request):
+    logout(request)
+    return redirect('index') 

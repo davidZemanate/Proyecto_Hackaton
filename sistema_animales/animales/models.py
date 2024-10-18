@@ -37,7 +37,7 @@ class Rol(models.Model):
 
 
 class Usuario(models.Model):
-    nombre = models.CharField(max_length=45, verbose_name="Usuario Nombre")
+    username = models.CharField(max_length=45, verbose_name="Usuario")
     contrasena = models.CharField(max_length=45)
     rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE)

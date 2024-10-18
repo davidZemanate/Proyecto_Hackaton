@@ -126,6 +126,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+  
+
 STATICFILES_DIRS = [
     BASE_DIR / "animales/templates/static",  # Ajusta esto según la estructura de tu proyecto
 ]
