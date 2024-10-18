@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-center">Dashboard de Animales en Vulnerabilidad</h1>
+
+<!-- Botones para abrir los modales -->
+<div class="text-center mb-4">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalRegistrarAnimal">
+        Registrar Animal
+    </button>
+    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalRegistrarAyuda">
+        Registrar Ayuda
+    </button>
+</div>
+
+<!-- Tabla de animales -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>Nombre</th>
+            <th>Edad</th>
+            <th>tipo de animal</th>
+            <th>Municipio</th>
+            <th>Departamento</th>
+            <th>Direccion</th>
+            <th>Tipo de Vulnerabilidad</th>
+            <th>Descripción</th>
+            <th>Ayudas Ofrecidas</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for animal in animales %}
+        <tr>
+            <td>{{animal.id}}</td>
+            <td>{{ animal.nombre }}</td>
+            <td>{{ animal.edad }}</td>
+            <td>{{ animal.tipo }}</td>
+            <td>{{ animal.municipio }}</td>
+            <td>{{ animal.departamento }}</td>
+            <td>{{ animal.direccion }}</td>
+            <td>{{ animal.tipo_vulnerabilidad }}</td>
+            <td>{{ animal.descripcion }}</td>
+            <td>
+                <ul>
+                    {% for ayuda in animal.ayuda_set.all %}
+                    <li>{{ ayuda.tipo_ayuda }} por {{ ayuda.oferente }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <a href="{% url 'eliminar_animal' animal.id %}" onclick="return confirm('¿Estás seguro de que deseas eliminar este animal?');">
+                    Eliminar
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Modal para Registrar Animal -->
+<div class="modal fade" id="modalRegistrarAnimal" tabindex="-1" role="dialog" aria-labelledby="modalRegistrarAnimalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalRegistrarAnimalLabel">Registrar un Animal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="formAnimal">
+                    {% csrf_token %}
+                    {{ form_animal.as_p }}
+                    <button type="submit" name="formAnimal" class="btn btn-primary">Registrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Registrar Ayuda -->
+<div class="modal fade" id="modalRegistrarAyuda" tabindex="-1" role="dialog" aria-labelledby="modalRegistrarAyudaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalRegistrarAyudaLabel">Registrar una Ayuda</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="formAyuda">
+                    {% csrf_token %}
+                    {{ form_ayuda.as_p }}
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
